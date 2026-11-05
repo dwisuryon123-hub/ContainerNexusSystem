@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ContainerSuryo - Platform Sewa & Tracking Container Transparan</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        navy: { 800: '#1e293b', 900: '#0f172a', 950: '#080d1a' },
+                        logistics: { 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8' },
+                        amberGold: { 400: '#fbbf24', 500: '#f59e0b', 600: '#d97706' }
+                    },
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans antialiased selection:bg-logistics-500 selection:text-white transition-colors duration-300">
+
+    <!-- MAIN NAVBAR -->
+    <header class="sticky top-0 z-50 glass-panel shadow-sm transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- BRAND LOGO -->
+                <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('beranda')">
+                    <div class="w-11 h-11 bg-navy-900 dark:bg-logistics-600 rounded-xl flex items-center justify-center text-amberGold-400 shadow-md border border-slate-700">
+                        <i class="fa-solid fa-boxes-packing text-2xl"></i>
+                    </div>
+                    <div>
+                        <span class="text-2xl font-extrabold tracking-tight text-navy-900 dark:text-white">Container<span class="text-logistics-600 dark:text-logistics-400">Suryo</span></span>
+                        <span class="block text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-widest font-semibold -mt-1">Logistics & Rental Platform</span>
+                    </div>
+                </div>
+
+                <!-- DESKTOP NAVIGATION MENU -->
+                <nav class="hidden md:flex items-center space-x-1 lg:space-x-2">
+                    <button onclick="switchTab('beranda')" id="nav-beranda" class="nav-link px-3 py-2 rounded-lg font-semibold text-sm transition-all text-logistics-600 bg-logistics-50 dark:bg-slate-800 dark:text-logistics-400">
+                        <i class="fa-solid fa-house mr-1.5 opacity-70"></i>Beranda
+                    </button>
+                    <button onclick="switchTab('sewa')" id="nav-sewa" class="nav-link px-3 py-2 rounded-lg font-medium text-sm text-slate-600 dark:text-slate-300 hover:text-logistics-600 dark:hover:text-logistics-400 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all">
+                        <i class="fa-solid fa-truck-ramp-box mr-1.5 opacity-70"></i>Cari & Sewa
+                    </button>
+                    <button onclick="switchTab('penawaran')" id="nav-penawaran" class="nav-link px-3 py-2 rounded-lg font-medium text-sm text-slate-600 dark:text-slate-300 hover:text-logistics-600 dark:hover:text-logistics-400 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all">
+                        <i class="fa-solid fa-file-invoice-dollar mr-1.5 opacity-70"></i>Minta Penawaran
+                    </button>
+                    <button onclick="switchTab('tracking')" id="nav-tracking" class="nav-link px-3 py-2 rounded-lg font-medium text-sm text-slate-600 dark:text-slate-300 hover:text-logistics-600 dark:hover:text-logistics-400 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all">
+                        <i class="fa-solid fa-location-crosshairs mr-1.5 opacity-70"></i>Pemesanan & Tracking
+                    </button>
+                    <button onclick="switchTab('bantuan')" id="nav-bantuan" class="nav-link px-3 py-2 rounded-lg font-medium text-sm text-slate-600 dark:text-slate-300 hover:text-logistics-600 dark:hover:text-logistics-400 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all">
+                        <i class="fa-solid fa-headset mr-1.5 opacity-70"></i>Bantuan & FAQ
+                    </button>
+                </nav>
+
+                <!-- USER PROFILE, DARK MODE TOGGLE & CTA -->
+                <div class="hidden lg:flex items-center space-x-3 pl-4 border-l border-slate-200 dark:border-slate-800">
+                    <button onclick="toggleDarkMode()" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-amberGold-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition" title="Ganti Tema">
+                        <i id="theme-icon" class="fa-solid fa-moon text-base"></i>
+                    </button>
+
+                    <div class="flex items-center gap-3 bg-slate-100 dark:bg-slate-900 p-1.5 pr-3 rounded-full border border-slate-200 dark:border-slate-800 transition cursor-pointer" onclick="showToast('Profil User Logistik aktif')">
+                        <div class="w-8 h-8 rounded-full bg-navy-900 text-amberGold-400 font-bold flex items-center justify-center border-2 border-logistics-600 text-xs">
+                            <i class="fa-solid fa-user-gear"></i>
+                        </div>
+                        <div class="text-left leading-tight">
+                            <p class="text-xs font-bold text-slate-900 dark:text-white">User Logistik</p>
+                            <p class="text-[10px] text-slate-500 dark:text-slate-400 font-medium">Akun Perusahaan</p>
+                        </div>
+                    </div>
+
+                    <button onclick="switchTab('sewa')" class="bg-logistics-600 hover:bg-logistics-700 text-white text-sm font-bold px-5 py-2.5 rounded-xl shadow-md shadow-logistics-600/30 transition-all hover:scale-[1.02]">
+                        <i class="fa-solid fa-cart-plus mr-1"></i> Sewa Sekarang
+                    </button>
+                </div>
+
+                <!-- MOBILE MENU BUTTON -->
+                <div class="flex md:hidden items-center gap-2">
+                    <button onclick="toggleDarkMode()" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-amberGold-400">
+                        <i id="theme-icon-mobile" class="fa-solid fa-moon text-base"></i>
+                    </button>
+                    <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MOBILE NAVIGATION DROPDOWN -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 pt-3 pb-6 space-y-2 shadow-lg">
+            <button onclick="switchTab('beranda'); toggleMobileMenu()" class="w-full text-left px-4 py-3 rounded-xl font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-3">
+                <i class="fa-solid fa-house w-5 text-logistics-600"></i> Beranda
+            </button>
+            <button onclick="switchTab('sewa'); toggleMobileMenu()" class="w-full text-left px-4 py-3 rounded-xl font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-3">
+                <i class="fa-solid fa-truck-ramp-box w-5 text-logistics-600"></i> Cari & Sewa
+            </button>
+            <button onclick="switchTab('penawaran'); toggleMobileMenu()" class="w-full text-left px-4 py-3 rounded-xl font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-3">
+                <i class="fa-solid fa-file-invoice-dollar w-5 text-logistics-600"></i> Minta Penawaran
+            </button>
+            <button onclick="switchTab('tracking'); toggleMobileMenu()" class="w-full text-left px-4 py-3 rounded-xl font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-3">
+                <i class="fa-solid fa-location-crosshairs w-5 text-logistics-600"></i> Pemesanan & Tracking
+            </button>
+            <button onclick="switchTab('bantuan'); toggleMobileMenu()" class="w-full text-left px-4 py-3 rounded-xl font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-3">
+                <i class="fa-solid fa-headset w-5 text-logistics-600"></i> Bantuan & FAQ
+            </button>
+        </div>
+    </header>
+
+    <!-- CONTENT SECTIONS -->
+    <main class="min-h-screen">
+
+        <!-- TAB 1: BERANDA -->
+        <section id="tab-beranda" class="tab-content transition-all duration-500">
+            <!-- HERO SECTION DENGAN GAMBAR BACKGROUND PELABUHAN -->
+            <div class="relative overflow-hidden pt-12 pb-20 lg:pt-20 lg:pb-32 bg-slate-900 text-white">
+                <img src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&q=80&w=1920" alt="Pelabuhan Peti Kemas" class="absolute inset-0 w-full h-full object-cover opacity-25 mix-blend-overlay">
+                <div class="absolute inset-0 bg-gradient-to-r from-navy-950 via-navy-900/90 to-transparent"></div>
+
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                        
+                        <!-- Hero Left Content -->
+                        <div class="lg:col-span-7 space-y-6 text-center lg:text-left reveal">
+                            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/20 backdrop-blur-md text-amberGold-400 text-xs sm:text-sm font-semibold">
+                                <i class="fa-solid fa-shield-halved"></i>
+                                <span>Transparan & Bebas Biaya Tersembunyi</span>
+                            </div>
+
+                            <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight">
+                                Sewa Container Cepat, <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-logistics-500 to-amberGold-400">Transparan</span>, & Melacak Real-Time
+                            </h1>
+
+                            <p class="text-base sm:text-lg text-slate-300 max-w-2xl font-normal leading-relaxed">
+                                Bebaskan bisnis Anda dari ketidakpastian harga dan proses manual. Dapatkan kepastian harga sewa peti kemas secara langsung dan lacak kontainer Anda 24/7 dalam satu sistem logistik modern.
+                            </p>
+
+                            <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
+                                <button onclick="switchTab('sewa')" class="w-full sm:w-auto bg-logistics-600 hover:bg-logistics-500 text-white font-bold px-8 py-4 rounded-xl shadow-lg transition-all hover:scale-105 flex items-center justify-center gap-3">
+                                    <i class="fa-solid fa-magnifying-glass"></i> Cari Container Tersedia
+                                </button>
+                                <button onclick="switchTab('penawaran')" class="w-full sm:w-auto bg-slate-800/90 hover:bg-slate-800 text-slate-200 border border-slate-700 font-bold px-8 py-4 rounded-xl transition-all flex items-center justify-center gap-3">
+                                    <i class="fa-solid fa-file-signature"></i> Minta Penawaran Borongan
+                                </button>
+                            </div>
+
+                            <div class="pt-8 border-t border-slate-700/60 grid grid-cols-3 gap-4 text-center lg:text-left">
+                                <div>
+                                    <p class="text-2xl sm:text-3xl font-extrabold text-amberGold-400">1,500+</p>
+                                    <p class="text-xs text-slate-400">Unit Ready Stock</p>
+                                </div>
+                                <div>
+                                    <p class="text-2xl sm:text-3xl font-extrabold text-white">99.8%</p>
+                                    <p class="text-xs text-slate-400">On-Time Delivery</p>
+                                </div>
+                                <div>
+                                    <p class="text-2xl sm:text-3xl font-extrabold text-logistics-500">100%</p>
+                                    <p class="text-xs text-slate-400">Transparansi Harga</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Hero Right Interactive Calculator Card -->
+                        <div class="lg:col-span-5 reveal">
+                            <div class="glass-panel-dark rounded-3xl p-6 sm:p-8 text-white shadow-2xl pulse-subtle border border-white/10">
+                                <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-700">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded-lg bg-logistics-600/30 border border-logistics-500/50 flex items-center justify-center text-logistics-400">
+                                            <i class="fa-solid fa-calculator text-lg"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="font-bold text-base">Sewa Cepat</h3>
+                                            <p class="text-xs text-slate-400">Estimasi seketika tanpa hidden fees</p>
+                                        </div>
+                                    </div>
+                                    <span class="text-[10px] bg-emerald-500/20 text-emerald-400 font-semibold px-2.5 py-1 rounded-full border border-emerald-500/30">Live System</span>
+                                </div>
+
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="block text-xs font-semibold text-slate-300 mb-1">Tipe & Ukuran Container</label>
+                                        <select id="hero-size" onchange="calculateQuickEstimate()" class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py-2.5 text-sm">
+                                            <option value="20ft">20ft Dry Standard Container</option>
+                                            <option value="40ft">40ft High Cube Container</option>
+                                            <option value="reefer">40ft Reefer (Refrigerated)</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="grid grid-cols-2 gap-3">
+                                        <div>
+                                            <label class="block text-xs font-semibold text-slate-300 mb-1">Durasi Sewa</label>
+                                            <select id="hero-duration" onchange="calculateQuickEstimate()" class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-3 py-2.5 text-sm">
+                                                <option value="1">1 Bulan</option>
+                                                <option value="3">3 Bulan (-5%)</option>
+                                                <option value="6">6 Bulan (-10%)</option>
+                                                <option value="12">12 Bulan (-15%)</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-semibold text-slate-300 mb-1">Jumlah Unit</label>
+                                            <input type="number" id="hero-qty" value="1" min="1" max="50" onchange="calculateQuickEstimate()" onkeyup="calculateQuickEstimate()" class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-3 py-2.5 text-sm">
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-slate-900/80 rounded-xl p-4 border border-slate-800 space-y-2 mt-4">
+                                        <div class="flex justify-between text-xs text-slate-400">
+                                            <span>Sewa Dasar:</span>
+                                            <span id="hero-base-price">Rp 2.500.000 / bln</span>
+                                        </div>
+                                        <div class="flex justify-between text-xs text-slate-400">
+                                            <span>Diskon Paket:</span>
+                                            <span id="hero-discount-val" class="text-emerald-400">Rp 0</span>
+                                        </div>
+                                        <div class="border-t border-slate-800 pt-2 flex justify-between items-center">
+                                            <span class="text-sm font-bold text-white">Total Estimasi:</span>
+                                            <span id="hero-total-price" class="text-lg font-extrabold text-amberGold-400">Rp 2.500.000</span>
+                                        </div>
+                                    </div>
+
+                                    <button onclick="switchTab('sewa')" class="w-full bg-amberGold-500 hover:bg-amberGold-400 text-slate-950 font-bold py-3 rounded-xl shadow-lg transition text-sm flex items-center justify-center gap-2">
+                                        <span>Proses Booking Sekarang</span>
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- KEY VALUE PROPOSITION -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 relative z-20">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-xl border border-slate-200 dark:border-slate-800 hover:shadow-2xl transition-all duration-300 group reveal">
+                        <div class="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-950/50 text-logistics-600 dark:text-logistics-400 flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-receipt"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-navy-900 dark:text-white mb-2">Harga 100% Transparan</h3>
+                        <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                            Tidak ada lagi nego ribet via telepon atau biaya siluman. Semua detail deposit dan tarif sewa tertera jelas sebelum transaksi.
+                        </p>
+                    </div>
+
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-xl border border-slate-200 dark:border-slate-800 hover:shadow-2xl transition-all duration-300 group reveal">
+                        <div class="w-12 h-12 rounded-xl bg-amber-50 dark:bg-amber-950/50 text-amberGold-600 dark:text-amberGold-400 flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-clock-rotate-left"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-navy-900 dark:text-white mb-2">Booking Cepat 3 Menit</h3>
+                        <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                            Proses digital penuh dari pemilihan unit, verifikasi dokumen, hingga persetujuan kontrak secara otomatis dalam hitungan menit.
+                        </p>
+                    </div>
+
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-xl border border-slate-200 dark:border-slate-800 hover:shadow-2xl transition-all duration-300 group reveal">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-satellite-dish"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-navy-900 dark:text-white mb-2">GPS Tracking Real-Time</h3>
+                        <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                            Pantau pergerakan fisik kontainer Anda dari depo, perjalanan truk, pelabuhan, hingga lokasi tujuan akhir secara akurat.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONTAINER CATALOG PREVIEW WITH REAL PHOTOS -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+                <div class="text-center max-w-3xl mx-auto mb-12 reveal">
+                    <span class="text-logistics-600 dark:text-logistics-400 font-extrabold text-xs uppercase tracking-widest bg-logistics-50 dark:bg-slate-800 px-3 py-1 rounded-full border border-logistics-100 dark:border-slate-700">Pilihan Standar Industri</span>
+                    <h2 class="text-3xl font-extrabold text-navy-900 dark:text-white mt-3">Peti Kemas Siap Pakai Untuk Segala Kebutuhan Logistik</h2>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm mt-2">Seluruh kontainer ContainerSuryo telah bersertifikasi standar ISO dan melalui verifikasi fisik ketat.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Item 1: 20ft -->
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col reveal">
+                        <div class="relative h-52 bg-slate-900 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=800" alt="20ft Dry Container" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+                            <span class="absolute top-3 right-3 bg-navy-900/90 text-white text-xs font-bold px-3 py-1 rounded-full backdrop-blur-sm border border-slate-700">Dry Cargo</span>
+                        </div>
+                        <div class="p-6 flex-1 flex flex-col justify-between">
+                            <div>
+                                <h3 class="text-xl font-bold text-navy-900 dark:text-white">20ft Standard Dry Container</h3>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Ideal untuk kargo umum, barang dagangan, dan ritel SME.</p>
+                                <div class="mt-4 space-y-2 border-t border-slate-100 dark:border-slate-800 pt-4 text-xs text-slate-600 dark:text-slate-400">
+                                    <div class="flex justify-between"><span>Dimensi:</span> <span class="font-semibold text-slate-800 dark:text-slate-200">6.06m x 2.44m x 2.59m</span></div>
+                                    <div class="flex justify-between"><span>Muatan Maksimal:</span> <span class="font-semibold text-slate-800 dark:text-slate-200">28.200 Kg</span></div>
+                                    <div class="flex justify-between"><span>Kapasitas Volume:</span> <span class="font-semibold text-slate-800 dark:text-slate-200">33.2 m³</span></div>
+                                </div>
+                            </div>
+                            <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                                <div>
+                                    <span class="text-xs text-slate-400 block">Mulai dari</span>
+                                    <span class="text-lg font-extrabold text-navy-900 dark:text-white">Rp 2.500.000<span class="text-xs font-normal text-slate-500">/bln</span></span>
+                                </div>
+                                <button onclick="openDetailModal('20ft')" class="bg-logistics-50 dark:bg-slate-800 hover:bg-logistics-100 dark:hover:bg-slate-700 text-logistics-700 dark:text-logistics-300 font-bold px-4 py-2 rounded-xl text-sm transition">
+                                    Detail & Sewa
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 2: 40ft High Cube -->
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col reveal">
+                        <div class="relative h-52 bg-slate-900 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&q=80&w=800" alt="40ft High Cube Container" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+                            <span class="absolute top-3 right-3 bg-navy-900/90 text-white text-xs font-bold px-3 py-1 rounded-full backdrop-blur-sm border border-slate-700">Extra Volume</span>
+                        </div>
+                        <div class="p-6 flex-1 flex flex-col justify-between">
+                            <div>
+                                <h3 class="text-xl font-bold text-navy-900 dark:text-white">40ft High Cube (HC) Container</h3>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Kapasitas tinggi untuk pengiriman skala besar pabrik & manufaktur.</p>
+                                <div class="mt-4 space-y-2 border-t border-slate-100 dark:border-slate-800 pt-4 text-xs text-slate-600 dark:text-slate-400">
+                                    <div class="flex justify-between"><span>Dimensi:</span> <span class="font-semibold text-slate-800 dark:text-slate-200">12.19m x 2.44m x 2.89m</span></div>
+                                    <div class="flex justify-between"><span>Muatan Maksimal:</span> <span class="font-semibold text-slate-800 dark:text-slate-200">28.600 Kg</span></div>
+                                    <div class="flex justify-between"><span>Kapasitas Volume:</span> <span class="font-semibold text-slate-800 dark:text-slate-200">76.4 m³</span></div>
+                                </div>
+                            </div>
+                            <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                                <div>
+                                    <span class="text-xs text-slate-400 block">Mulai dari</span>
+                                    <span class="text-lg font-extrabold text-navy-900 dark:text-white">Rp 4.200.000<span class="text-xs font-normal text-slate-500">/bln</span></span>
+                                </div>
+                                <button onclick="openDetailModal('40ft')" class="bg-logistics-600 text-white font-bold px-4 py-2 rounded-xl text-sm transition">
+                                    Detail & Sewa
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 3: Reefer -->
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col reveal">
+                        <div class="relative h-52 bg-slate-900 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1519003722824-194d4455a60c?auto=format&fit=crop&q=80&w=800" alt="Reefer Container" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+                            <span class="absolute top-3 right-3 bg-navy-900/90 text-white text-xs font-bold px-3 py-1 rounded-full backdrop-blur-sm border border-slate-700">Cold Chain</span>
+                        </div>
+                        <div class="p-6 flex-1 flex flex-col justify-between">
+                            <div>
+                                <h3 class="text-xl font-bold text-navy-900 dark:text-white">40ft Reefer (Refrigerated)</h3>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Kontrol suhu presisi -30°C s.d +30°C untuk makanan & obat.</p>
+                                <div class="mt-4 space-y-2 border-t border-slate-100 dark:border-slate-800 pt-4 text-xs text-slate-600 dark:text-slate-400">
+                                    <div class="flex justify-between"><span>Rentang Suhu:</span> <span class="font-semibold text-slate-800 dark:text-slate-200">-30°C hingga +30°C</span></div>
+                                    <div class="flex justify-between"><span>Muatan Maksimal:</span> <span class="font-semibold text-slate-800 dark:text-slate-200">29.400 Kg</span></div>
+                                    <div class="flex justify-between"><span>Daya Generator:</span> <span class="font-semibold text-slate-800 dark:text-slate-200">380V/460V 3-Phase</span></div>
+                                </div>
+                            </div>
+                            <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                                <div>
+                                    <span class="text-xs text-slate-400 block">Mulai dari</span>
+                                    <span class="text-lg font-extrabold text-navy-900 dark:text-white">Rp 7.500.000<span class="text-xs font-normal text-slate-500">/bln</span></span>
+                                </div>
+                                <button onclick="openDetailModal('reefer')" class="bg-logistics-50 dark:bg-slate-800 hover:bg-logistics-100 dark:hover:bg-slate-700 text-logistics-700 dark:text-logistics-300 font-bold px-4 py-2 rounded-xl text-sm transition">
+                                    Detail & Sewa
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: CARI & SEWA CONTAINER -->
+        <section id="tab-sewa" class="tab-content hidden transition-all duration-500 py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-2xl mx-auto mb-10">
+                    <span class="text-logistics-600 dark:text-logistics-400 font-extrabold text-xs uppercase tracking-widest bg-logistics-50 dark:bg-slate-800 px-3 py-1 rounded-full">Katalog & Booking</span>
+                    <h2 class="text-3xl font-extrabold text-navy-900 dark:text-white mt-3">Pusat Pencarian & Pemesanan Container</h2>
+                </div>
+
+                <!-- Filter & Search Bar -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-md border border-slate-200 dark:border-slate-800 mb-8 flex flex-col md:flex-row gap-4 items-center justify-between">
+                    <div class="w-full md:w-1/3 relative">
+                        <i class="fa-solid fa-search absolute left-4 top-3.5 text-slate-400"></i>
+                        <input type="text" id="catalog-search" onkeyup="filterCatalog()" placeholder="Cari tipe atau ukuran..." class="w-full pl-11 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm dark:text-white">
+                    </div>
+                    <select id="catalog-filter" onchange="filterCatalog()" class="px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm dark:text-white">
+                        <option value="all">Semua Kategori</option>
+                        <option value="dry">Dry Cargo</option>
+                        <option value="hc">High Cube</option>
+                        <option value="reefer">Reefer</option>
+                    </select>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <!-- Inventory List -->
+                    <div class="lg:col-span-7 space-y-4">
+                        <div class="inventory-card bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col sm:flex-row gap-5 items-center" data-category="dry" data-name="20ft dry standard container">
+                            <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=400" alt="20ft" class="w-full sm:w-36 h-28 object-cover rounded-xl">
+                            <div class="flex-1">
+                                <h4 class="text-lg font-bold text-navy-900 dark:text-white">20ft Standard Dry Container</h4>
+                                <p class="text-xs text-slate-500">Ready Depo Jakarta & Surabaya | Grade A</p>
+                                <div class="flex items-center justify-between mt-4">
+                                    <span class="font-extrabold text-navy-900 dark:text-white">Rp 2.500.000 / bln</span>
+                                    <button onclick="selectContainerForBooking('20ft Standard Dry', 2500000)" class="bg-logistics-600 text-white text-xs font-bold px-4 py-2 rounded-xl">Pilih Unit Ini</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="inventory-card bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col sm:flex-row gap-5 items-center" data-category="hc" data-name="40ft high cube container">
+                            <img src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&q=80&w=400" alt="40ft" class="w-full sm:w-36 h-28 object-cover rounded-xl">
+                            <div class="flex-1">
+                                <h4 class="text-lg font-bold text-navy-900 dark:text-white">40ft High Cube Container</h4>
+                                <p class="text-xs text-slate-500">Extra Height 2.89m | High Capacity</p>
+                                <div class="flex items-center justify-between mt-4">
+                                    <span class="font-extrabold text-navy-900 dark:text-white">Rp 4.200.000 / bln</span>
+                                    <button onclick="selectContainerForBooking('40ft High Cube', 4200000)" class="bg-logistics-600 text-white text-xs font-bold px-4 py-2 rounded-xl">Pilih Unit Ini</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="inventory-card bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col sm:flex-row gap-5 items-center" data-category="reefer" data-name="40ft reefer refrigerated container">
+                            <img src="https://images.unsplash.com/photo-1519003722824-194d4455a60c?auto=format&fit=crop&q=80&w=400" alt="Reefer" class="w-full sm:w-36 h-28 object-cover rounded-xl">
+                            <div class="flex-1">
+                                <h4 class="text-lg font-bold text-navy-900 dark:text-white">40ft Reefer (Refrigerated)</h4>
+                                <p class="text-xs text-slate-500">Cold Chain Suhu -30°C s.d +30°C</p>
+                                <div class="flex items-center justify-between mt-4">
+                                    <span class="font-extrabold text-navy-900 dark:text-white">Rp 7.500.000 / bln</span>
+                                    <button onclick="selectContainerForBooking('40ft Reefer', 7500000)" class="bg-logistics-600 text-white text-xs font-bold px-4 py-2 rounded-xl">Pilih Unit Ini</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Booking Summary Form -->
+                    <div class="lg:col-span-5">
+                        <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-xl sticky top-28">
+                            <h3 class="text-lg font-bold text-navy-900 dark:text-white mb-4 pb-3 border-b border-slate-100 dark:border-slate-800 flex items-center gap-2">
+                                <i class="fa-solid fa-file-contract text-logistics-600"></i> Ringkasan Pemesanan
+                            </h3>
+
+                            <form onsubmit="submitBooking(event)" class="space-y-4">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Unit Dipilih</label>
+                                    <input type="text" id="selected-unit-name" readonly value="20ft Standard Dry" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm font-bold text-slate-800 dark:text-white">
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Durasi (Bulan)</label>
+                                        <input type="number" id="booking-duration" value="3" min="1" max="36" onchange="updateBookingTotal()" onkeyup="updateBookingTotal()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-sm dark:text-white">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Jumlah Unit</label>
+                                        <input type="number" id="booking-qty" value="1" min="1" max="20" onchange="updateBookingTotal()" onkeyup="updateBookingTotal()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-sm dark:text-white">
+                                    </div>
+                                </div>
+
+                                <div class="bg-slate-50 dark:bg-slate-800/60 rounded-2xl p-4 space-y-2 border border-slate-100 dark:border-slate-800">
+                                    <div class="flex justify-between text-xs text-slate-600 dark:text-slate-400">
+                                        <span>Tarif Sewa per Bulan:</span>
+                                        <span id="summary-unit-price">Rp 2.500.000</span>
+                                    </div>
+                                    <div class="flex justify-between text-xs text-slate-600 dark:text-slate-400">
+                                        <span>Biaya Mobilisasi:</span>
+                                        <span>Rp 1.500.000</span>
+                                    </div>
+                                    <div class="border-t border-slate-200 dark:border-slate-700 pt-2 flex justify-between items-center">
+                                        <span class="text-sm font-bold text-navy-900 dark:text-white">Total Tagihan Awal:</span>
+                                        <span id="summary-grand-total" class="text-lg font-extrabold text-logistics-600">Rp 9.000.000</span>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="w-full bg-logistics-600 hover:bg-logistics-700 text-white font-bold py-3.5 rounded-xl shadow-lg transition text-sm">
+                                    Konfirmasi & Terbitkan Kontrak
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: MINTA PENAWARAN (RFQ) -->
+        <section id="tab-penawaran" class="tab-content hidden transition-all duration-500 py-12">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="bg-white dark:bg-slate-900 rounded-3xl p-8 sm:p-12 shadow-xl border border-slate-200 dark:border-slate-800">
+                    <div class="text-center max-w-xl mx-auto mb-8">
+                        <span class="text-amberGold-600 font-extrabold text-xs uppercase tracking-widest bg-amber-50 dark:bg-slate-800 px-3 py-1 rounded-full">Request for Quotation (RFQ)</span>
+                        <h2 class="text-3xl font-extrabold text-navy-900 dark:text-white mt-3">Formulir Penawaran Borongan Korporat</h2>
+                    </div>
+
+                    <form onsubmit="submitRFQ(event)" class="space-y-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2">Nama Lengkap PIC</label>
+                                <input type="text" required placeholder="Budi Santoso" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm dark:text-white">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2">Nama Perusahaan / PT</label>
+                                <input type="text" required placeholder="PT Logistik Nusantara" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm dark:text-white">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2">Email Perusahaan</label>
+                                <input type="email" required placeholder="budi@logistiknusantara.co.id" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm dark:text-white">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2">Nomor WhatsApp</label>
+                                <input type="tel" required placeholder="081234567890" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm dark:text-white">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full bg-navy-900 hover:bg-navy-800 dark:bg-logistics-600 dark:hover:bg-logistics-700 text-white font-bold py-4 rounded-xl shadow-xl transition">
+                            Kirim Permintaan Penawaran Resmi
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: TRACKING -->
+        <section id="tab-tracking" class="tab-content hidden transition-all duration-500 py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-2xl mx-auto mb-10">
+                    <span class="text-emerald-600 font-extrabold text-xs uppercase tracking-widest bg-emerald-50 dark:bg-slate-800 px-3 py-1 rounded-full">Live GPS Radar 2.0</span>
+                    <h2 class="text-3xl font-extrabold text-navy-900 dark:text-white mt-3">Lacak Status Kontainer Real-Time</h2>
+                </div>
+
+                <div class="max-w-2xl mx-auto bg-white dark:bg-slate-900 p-4 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-800 mb-8 flex gap-3">
+                    <input type="text" id="tracking-input" value="CS-889201" class="flex-1 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm dark:text-white font-mono">
+                    <button onclick="simulateTracking()" class="bg-logistics-600 hover:bg-logistics-700 text-white font-bold px-6 py-3 rounded-xl text-sm shadow">
+                        Lacak Unit
+                    </button>
+                </div>
+
+                <div class="max-w-4xl mx-auto bg-white dark:bg-slate-900 rounded-3xl p-8 shadow-xl border border-slate-200 dark:border-slate-800">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-100 dark:border-slate-800 gap-4">
+                        <div>
+                            <span class="text-xs bg-emerald-500/10 text-emerald-500 font-bold px-3 py-1 rounded-full">Dalam Perjalanan (In Transit)</span>
+                            <h3 class="text-xl font-extrabold text-navy-900 dark:text-white mt-2 font-mono">Resi: CS-889201</h3>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-xs text-slate-400 block">Estimasi Tiba (ETA)</span>
+                            <span class="text-base font-bold text-navy-900 dark:text-white">Besok, 14:30 WIB</span>
+                        </div>
+                    </div>
+
+                    <div class="py-8 space-y-8 relative before:absolute before:inset-0 before:left-6 before:w-0.5 before:bg-slate-200 dark:before:bg-slate-800">
+                        <div class="flex items-start gap-4 relative">
+                            <div class="w-12 h-12 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold z-10 shadow-md">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-navy-900 dark:text-white">QC Depo Jakarta Selesai</h4>
+                                <span class="text-[10px] text-slate-400">Kemarin, 08:00 WIB</span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4 relative">
+                            <div class="w-12 h-12 rounded-full bg-amberGold-500 text-slate-950 flex items-center justify-center font-bold z-10 shadow-md animate-pulse">
+                                <i class="fa-solid fa-truck-fast"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-navy-900 dark:text-white">Perjalanan Truk Trailer (KM 152 Tol Trans-Jawa)</h4>
+                                <span class="text-[10px] text-amberGold-500 font-semibold">Status Saat Ini</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 5: BANTUAN -->
+        <section id="tab-bantuan" class="tab-content hidden transition-all duration-500 py-12">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-2xl mx-auto mb-12">
+                    <span class="text-logistics-600 dark:text-logistics-400 font-extrabold text-xs uppercase tracking-widest bg-logistics-50 dark:bg-slate-800 px-3 py-1 rounded-full">Pusat Layanan</span>
+                    <h2 class="text-3xl font-extrabold text-navy-900 dark:text-white mt-3">Bantuan & FAQ Transparansi</h2>
+                </div>
+
+                <div class="space-y-4 mb-12">
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm cursor-pointer" onclick="toggleFaq(this)">
+                        <div class="flex justify-between items-center font-bold text-navy-900 dark:text-white">
+                            <span>Bagaimana ContainerSuryo menjamin transparansi harga sewa?</span>
+                            <i class="fa-solid fa-chevron-down transition-transform"></i>
+                        </div>
+                        <p class="text-xs text-slate-600 dark:text-slate-400 mt-3 hidden leading-relaxed">
+                            Semua tarif sewa dan biaya mobilisasi tercantum transparan pada kalkulator tanpa hidden fees.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-navy-950 text-slate-400 py-12 border-t border-slate-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs text-slate-500">
+            &copy; 2026 ContainerSuryo Logistics Platform. Hak Cipta Dilindungi.
+        </div>
+    </footer>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-navy-900 text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 text-sm">
+        <i class="fa-solid fa-circle-check text-emerald-400"></i>
+        <span id="toast-msg">Notifikasi sukses</span>
+    </div>
+
+    <!-- MODAL DETAIL CONTAINER -->
+    <div id="detail-modal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full p-6 relative border border-slate-200 dark:border-slate-800 shadow-2xl">
+            <button onclick="closeDetailModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <!-- Custom Script -->
+    <script src="script.js"></script>
+</body>
+</html>
